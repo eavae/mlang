@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block head %}
+<title>{{_("M-Lang - Necessary informations")}}</title>
+<link rel="stylesheet" href="/css/required.css">
+{% endblock %}
+
+{%block content%}
+<div class="container">
+    <form class="form-required" method="post" action="/required">
+        <h2 class="heading">{{_("Necessary infos")}}</h2>
+        <label for="nickname">{{_("nickname")}}</label>
+        <input class="form-control" name="nickname" type="text" required>
+        <label for="native">{{_("native language")}}</label>
+        <select class="form-control" name="native">
+            <option value="zh_CN">chinese</option>
+        </select>
+        <label for="learning">{{_("learning language")}}</label>
+        <select class="form-control" name="learning">
+            <option value="zh_CN">chinese</option>
+        </select>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">{{_("Get Start")}}</button>
+    </form>
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="/js/i18n.js"></script>
+<script src="/js/required.js"></script>
+{% endblock %}

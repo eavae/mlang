@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block head %}
+<title>{{user.nickname}}</title>
+<link rel="stylesheet" href="/css/user/index.css">
+{% endblock %}
+
+{% block content %}
+<div class="main-page row">
+    <div class="col-sm-8 col-sm-offset-2">{%if not user.is_anonymous() and user.id == uid%}
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="/user/{{uid}}/">{{_("My Brief")}}</a></li>
+            <li><a href="/user/{{uid}}/info">{{_("My Info")}}</a></li>
+            <li><a href="/user/{{uid}}/setting">{{_("Setting")}}</a></li>
+        </ul>{% endif %}
+        <div class="briefs">{% for twitter in twitters %}
+            <div class="popover text-pop">
+                <div class="popover-content">{{twitter['content'] | safe}}</div>
+                <div class="popover-title pop-title row">
+                    <div class="col-sm-4 hidden-xs datetime" title="{{twitter['datetime']}}">4小时 ago</div>
+                    <div class="toolbar"><a href="/t/detail/{{twitter['id']}}" class="btn-reply t-reply"><i class="icon-reply"></i> {{twitter['comments']}}</a><a href="/t/detail/{{twitter['id']}}" class="btn-reply t-reply"><i class="icon-pencil"></i> {{twitter['amends']}}</a></div>
+                </div>
+            </div>{% endfor %}
+        </div>
+        
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block head %}
+<title>{{_("M-Lang text")}}</title>
+<link rel="stylesheet" href="/css/t/index.css">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row main-page">
+        <div class="col-sm-8 col-sm-offset-2">
+            <div class="inputbox">
+            <form id="form-t-new" method="post" action="/t/new">
+                <div id="t-content" class="form-control" style="overflow:scroll;height:100px;"></div>
+                <input name="content" hidden>
+                <div class="row" style="margin-top: 10px;">
+                    <div class="col-md-2 col-md-offset-8 line"><select name="language" class="form-control btn-full"></select></div>
+                    <div class="col-md-2 line"><button type="submit" class="btn btn-info btn-full">{{_("Publish")}}</button></div>
+                </div>
+            </form>
+            </div>
+            <div class="texts">
+                <ul class="nav nav-tabs mb20">
+                  <li {% if language == 'en'%}class="active"{% endif %}><a href="/t/?lang=en">{{_("english")}}</a></li>
+                  <li {% if language == 'zh_CN'%}class="active"{% endif %}><a href="/t/?lang=zh_CN">{{_("chinese")}}</a></li>
+                  <li {% if language == 'ja'%}class="active"{% endif %}><a href="/t/?lang=ja">{{_("japanese")}}</a></li>
+                </ul>
+{% if results %} {% for twitter in results %}
+                <div class="text">
+                    <div class="user user-l" style="background:url('{{avatar.getAvatarUrl(twitter['uid'],'s')}}')"></div>
+                    <div class="popover text-pop">
+                        <div class="popover-title pop-title row">
+                            <div><a href="/user/{{twitter['uid']}}" class="nickname">{{twitter['nickname']}}</a></div>
+                            {%if twitter['purpose']%}<div class="purpose">({{twitter['purpose']}})</div>{%endif%}
+                            <div class="datetime" title="{{twitter['datetime']}}">{{twitter['timedelta']}}</div>
+                        </div>
+                        <div class="popover-content">
+                          {{twitter['content'] | safe}}
+                        </div>
+                        <div class="toolbar"><a href="/t/detail/{{twitter['id']}}#comment" title="{{_("comment")}}"><i class="icon-comments-alt"></i></i>{{twitter['comments']}}</a><a href="/t/detail/{{twitter['id']}}#amend" title="{{_("amend")}}"><i class="icon-pencil"></i>{{twitter['amends']}}</a></div>
+                    </div>
+                </div>
+{% endfor %}{% endif %}
+            </div>
+        </div>
+        <!-- <div class="col-sm-4 hidden-xs datetime">sdfasdf</div> -->
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="/js/i18n.js"></script>
+<script src="/js/t/index.js"></script>
+{% endblock %}

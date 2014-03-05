@@ -1,0 +1,75 @@
+.user{
+    width: 48px;
+    height: 48px;
+    line-height: 48px;
+    text-align: center;
+    margin-top: 5px;
+}
+.inputbox{
+    margin: 20px 0 20px 0;
+}
+.text{
+    margin-top: 5px;
+}
+.text-pop{
+    display: block;
+    position: relative;
+    box-shadow: none;
+    max-width: 100%;
+    margin-left: 60px;
+}
+.user-l{
+    float: left;
+}
+.user-r{
+    float: right;
+}
+.text-pop .arrow{
+    top:10%;
+}
+.pop-title{
+    font-size: 13px;
+    line-height: 12px;
+    height: 29px;
+}
+.pop-title div{
+    display: inline-block;
+}
+.popover-content p{
+    margin: 0px;
+}
+.text-sm{
+    margin-left: 50px;
+}
+.btn-reply{
+    padding: 0px;
+    width: 50px;
+    margin-top: -4px;
+}
+.popover-content div:not(:first-child) {
+    margin-top: 8px;
+}
+.comment-box{
+    margin: 20px 0 0 60px;
+}
+.comment-box .toolbar{
+    margin: 10px 0 0 0;
+}
+.nickname{
+    margin-right: 5px;
+}
+.purpose{
+    margin-right: 20px;
+    color: #858585;
+}
+.mb20{
+    margin-bottom: 20px;
+}
+
+.content-ae label{
+    float: left;
+    margin-right: 10px;
+}
+.content-ae span{
+    display: inline-block;
+}

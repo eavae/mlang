@@ -1,0 +1,26 @@
+application: m-lang
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: true
+
+handlers:
+- url: /css
+  static_dir: static/css
+- url: /js
+  static_dir: static/js
+- url: /img
+  static_dir: static/img
+- url: /fonts
+  static_dir: static/fonts
+
+- url: /.*
+  script: main.app
+
+
+
+libraries:
+- name: webapp2
+  version: latest
+- name: jinja2
+  version: latest

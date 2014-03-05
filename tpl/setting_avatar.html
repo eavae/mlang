@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block head %}
+<title>{{_("M-Lang - signin")}}</title>
+<link rel="stylesheet" href="/css/login.css">
+{% endblock %}
+
+{% block content%}
+
+{% if errors and errors > 0 %}
+<div class="error_message">
+    {% for error_message in error_messages %}
+    <p>{{error_message}}</p>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% if messages %}
+<div class="other_message">
+    {% for message in messages %}
+    <p>{{message}}</p>
+    {% endfor %}
+</div>
+{% endif %}
+
+<form method="post" action="{{upload_url}}" enctype="multipart/form-data">
+<table cellpadding="5" cellspacing="0" border="0">
+    <tr>
+        <td>{{l10n.string_avatar}}</td>
+        <td><input type="file" name="avatar"></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td><input type="submit" value="{{l10n.string_submit}}"></td>
+    </tr>
+</table>
+</form>
+{% endblock %}

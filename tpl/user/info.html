@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block head %}
+<title>{{user.nickname}}</title>
+<link rel="stylesheet" href="/css/user/index.css">
+<link rel="stylesheet" href="/css/user/info.css">
+{% endblock %}
+
+{% block content %}
+<div class="main-page row">
+    <div class="col-sm-8 col-sm-offset-2">
+        <ul class="nav nav-tabs">
+            <li><a href="/user/{{uid}}/">{{_("My Brief")}}</a></li>
+            <li class="active"><a href="#">{{_("My Info")}}</a></li>
+            <li><a href="/user/{{uid}}/setting">{{_("Setting")}}</a></li>
+        </ul>
+        <div class="infos">
+            <h3>{{_("Basic")}}</h3>
+            <table class="table-info">
+                <tr><td>{{_("ID")}}</td><td>{{userinfo['id']}}</td></tr>
+                <tr><td>{{_("E-mail")}}</td><td>{{userinfo['email']}}</td></tr>
+                <tr><td>{{_("Nickname")}}</td><td>{{userinfo['nickname']}}</td></tr>
+                <tr><td>{{_("Native language")}}</td><td>{{userinfo['native']}}</td></tr>
+                <tr><td>{{_("Learning language")}}</td><td>{{userinfo['learning']}}</td></tr>
+                <tr><td>{{_("Locale")}}</td><td>{{userinfo['locale']}}</td></tr>
+                <tr><td>{{_("Timezone")}}</td><td>{{userinfo['timezone']}}</td></tr>
+                <tr><td>{{_("Photo")}}</td><td class="avatar-c">{% for url in avatar_urls %}<img src="{{url}}" class="img-responsive img-thumbnail">{%endfor%}</td></tr>
+            </table>
+            <h3>{{_("Advances")}}</h3>
+            <table class="table-info">
+                <tr><td>{{_("Real name")}}</td><td>{{detail.realname}}</td></tr>
+                <tr><td>{{_("Date of birth")}}</td><td>{{detail.birth}}</td></tr>
+                <tr><td>{{_("Gender")}}</td><td>{%if detail.gender=='M'%}{{_("Male")}}{%else%}{{_("Female")}}{%endif%}</td></tr>
+                <tr><td>{{_("Job")}}</td><td>{{detail.job}}</td></tr>
+                <tr><td>{{_("Learning Purpose")}}</td><td>{{detail.purpose}}</td></tr>
+                <tr><td>{{_("Presentation")}}</td><td>{{detail.presentation}}</td></tr>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

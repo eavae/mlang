@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block head %}
+<title>{{_("M-Lang - Sign up")}}</title>
+<link rel="stylesheet" href="/css/signup.css">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <form class="form-signup" method="post" action="/signup">
+        <h4>error infos:</h4>
+        {% for msg in error_messages %}
+        <div>{{msg}}</div>
+        {% endfor %}
+        <h2>{{_("Sign up")}}</h2>
+        <input name="username" type="text" placeholder="{{_('NickName')}}" class="form-control" required>
+        <input name="email" type="email" placeholder='{{_("Email address")}}' class="form-control" required>
+        <input name="password" type="password" placeholder='{{_("Password")}}' class="form-control" required>
+        <input name="confirm" type="password" placeholder='{{_("Confirm password")}}' class="form-control" required>
+        <a href="/login" style="float:right;margin-bottom:10px;">{{_("Have an account?")}}</a>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">{{_("Sign up")}}</button>
+    </form>
+</div>
+{% endblock %}
+
+{% block script %}
+{% endblock %}

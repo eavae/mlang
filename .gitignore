@@ -1,0 +1,9 @@
+*.elc
+*.pyc
+*.wsgic
+ENV
+*.pot
+*.mo
+*.po
+index.yaml
+.DS_Store

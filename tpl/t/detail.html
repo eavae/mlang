@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+
+{% block head %}
+<title>{{_("M-Lang text detail")}}</title>
+<link rel="stylesheet" href="/css/t/index.css">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row main-page">
+        <div class="col-sm-8 col-sm-offset-2">
+            <h2>{{_("Original text")}}</h2>
+<div class="text">
+    <div class="user user-l" style="background:url('{{avatar.getAvatarUrl(twitter['uid'],'s')}}')"></div>
+    <div class="popover text-pop">
+        <div class="popover-title pop-title row">
+            <div><a href="/user/{{twitter['uid']}}" class="nickname">{{twitter['nickname']}}</a></div>
+            {%if twitter['purpose']%}<div class="purpose">({{twitter['purpose']}})</div>{%endif%}
+            <div class="datetime" title="{{twitter['datetime']}}">{{twitter['timedelta']}}</div>
+        </div>
+        <div class="popover-content">
+        {{twitter['content'] | safe}}
+        </div>
+        <div class="toolbar"></div>
+    </div>
+</div>
+
+{% if twitter['comments'] %}{% for comment in  twitter['comments']%}
+<div class="text text-sm">
+    <div class="user user-l" style="background:url('{{avatar.getAvatarUrl(comment['uid'],'s')}}')"></div>
+    <!-- <div class="user user-l"><a href="/user/{{comment['uid']}}">{{comment['nickname']}}</a></div> -->
+    <div class="popover text-pop">
+        <div class="popover-title pop-title row">
+            <div><a href="/user/{{comment['uid']}}">{{comment['nickname']}}</a></div>
+            {%if comment['purpose']%}<div class="purpose">({{comment['purpose']}})</div>{%endif%}
+            <div class="datetime" title="{{comment['datetime']}}">{{comment['timedelta']}}</div>
+            <!-- <div class="col-sm-4 hidden-xs datetime" title="{{comment['datetime']}}">{{comment['timedelta']}}</div> -->
+        </div>
+        <div class="popover-content">
+        {{comment['comment'] | safe}}
+        </div>
+        <div class="toolbar"><a href="javascript:void(0);" data-nick="{{comment['nickname']}}" data-uid="{{comment['uid']}}" class="btn-reply t-reply" title="{{_("Reply")}}"><i class="icon-reply"></i></a></div>
+    </div>
+</div>
+    {% endfor %}
+{% endif %}
+<div class="text text-sm">
+    <form id="form-comment" method="post" action="/t/comment">
+    <input name="tid" value="{{twitter['id']}}" type="hidden">
+    <div class="user user-l" style="background:url('{{avatar.getAvatarUrl(user.id,'s')}}')"></div>
+    <div  class="comment-box">
+        <div id="textarea-reply" class="form-control" style="overflow:scroll;height:100px;"></div>
+        <input name="comment" hidden>
+        <div class="toolbar"><button type="submit" class="btn btn-info btn-reply">{{_("Publish")}}</button></div>
+    </div>
+    </form>
+</div>
+
+{% if twitter['amends'] %}<h2>{{_("Amends")}}</h2>{% for amend in twitter['amends'] %}
+<div class="text">
+    <div class="user user-l" style="background:url('{{avatar.getAvatarUrl(amend['uid'],'s')}}')"></div>
+    <!-- <div class="user user-l"><a href="/user/{{amend['user_id']}}">{{amend['nickname']}}</a></div> -->
+    <div class="popover text-pop">
+        <div class="popover-title pop-title row">
+            <div><a href="/user/{{amend['uid']}}">{{amend['nickname']}}</a></div>
+            {%if amend['purpose']%}<div class="purpose">({{amend['purpose']}})</div>{%endif%}
+            <div class="datetime" title="{{amend['datetime']}}">{{amend['timedelta']}}</div>
+        </div>
+        <div class="popover-content">
+            {%if amend['content']%}<div class="content-ae"><label title="{{_("Amend")}}"><i class="icon-pencil"></i></label><span>{{amend['content'] | safe}}</span></div>{%endif%}
+            {%if amend['explain']%}<div class="content-ae"><label title="{{_("Explain")}}"><i class="icon-comment"></i></label><span>{{amend['explain'] | safe}}</span></div>{%endif%}
+        </div>
+        <div class="toolbar"><a href="javascript:void(0);" data-aid="{{amend['id']}}" data-nick="{{amend['nickname']}}" data-uid="{{amend['user_id']}}" class="a-reply" title="{{_("Reply")}}"><i class="icon-reply"></i></a></div>
+    </div>
+</div>
+        {% if amend['comments']%}
+            {% for comment in amend['comments'] %}
+<div class="text text-sm">
+    <div class="user user-l" style="background:url('{{avatar.getAvatarUrl(comment['uid'],'s')}}')"></div>
+    <!-- <div class="user user-l"><a href="/user/{{comment['uid']}}">{{comment['nickname']}}</a></div> -->
+    <div class="popover text-pop">
+        <div class="popover-title pop-title row">
+            <div><a href="/user/{{comment['uid']}}">{{comment['nickname']}}</a></div>
+            {%if comment['purpose']%}<div class="purpose">({{comment['purpose']}})</div>{%endif%}
+            <div class="datetime" title="{{comment['datetime']}}">{{comment['timedelta']}}</div>
+        </div>
+        <div class="popover-content">
+        {{comment['comment'] | safe}}
+        </div>
+        <div class="toolbar"><a href="javascript:void(0);" data-aid="{{amend['id']}}" data-nick="{{comment['nickname']}}" data-uid="{{comment['uid']}}" class="a-reply" title="{{_("Reply")}}"><i class="icon-reply"></i></a></div>
+    </div>
+</div>
+            {% endfor %}
+        {% endif %}
+<div class="text text-sm a-reply-box" data-aid="{{amend['id']}}" style="display:none;">
+    <form class="form-acomment" method="post" action="/t/acomment">
+    <input name="tid" value="{{twitter['id']}}" type="hidden">
+    <input name="aid" value="{{amend['id']}}" type="hidden">
+    <div class="user user-l" style="background:url('{{avatar.getAvatarUrl(user.id,'s')}}')"></div>
+    <div class="comment-box">
+        <div data-aid="{{amend['id']}}" id="a-comment" class="form-control textarea-a-reply" style="overflow:scroll;height:100px;"></div>
+        <input name="comment" type="hidden">
+        <div class="toolbar"><button type="submit" class="btn btn-info btn-reply">{{_("Publish")}}</button></div>
+    </div>
+    </form>
+</div>
+    {% endfor %}
+{% endif %}
+            <h2>{{_("Help he or she!")}}</h2>
+<form id="form-amend" method="post" action="/t/amend">
+    <input name="tid" value="{{twitter['id']}}" type="hidden">
+    <div class="btn-toolbar" data-role="amend-toolbar" data-target="#amend">
+      <div class="btn-group">
+        <a class="btn btn-default" data-edit="bold"><i class="icon-bold"></i></a>
+        <a class="btn btn-default" data-edit="strikethrough"><i class="icon-strikethrough"></i></a>
+        <a class="btn btn-default" data-edit="underline"><i class="icon-underline"></i></a>
+      </div>
+      <div class="btn-group">
+        <a class="btn btn-default font-red" data-edit="foreColor #ff0000">Red</a>
+        <a class="btn btn-default" data-edit="foreColor #000000">Black</a>
+      </div>
+    </div>
+    <div id="amend" contenteditable="true" class="form-control" style="overflow:scroll;height:100px;">{{twitter['content'] | safe}}</div>
+    <input name="amend" hidden>
+    <div class="form-group">
+        <label style="margin-top:10px;">{{_("Explain")}}</label>
+        <input name="explain" hidden>
+        <div id="explain" class="form-control" style="overflow:scroll;height:100px;"></div>
+    </div>
+    <div class="row">
+        <div class="col-sm-2"><button type="submit" class="btn btn-info">{{_("submit")}}</button></div>
+    </div>
+</form>     
+        </div>
+        <div></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="/js/t/detail.js"></script>
+{% endblock %}

@@ -1,0 +1,83 @@
+{# Note:这里是注释！！
+#   site:网站总体信息类，定义在model/db/__init__.py中
+#   page_title:页面title
+#   l10n:网页messages，翻译过后的静态语句
+#   member:用户类，定义在model/db/__init__.py中
+#   member_total:用户总数
+#   topic_total:用户总发言数
+#   reply_total:用户总回复数
+#   amend_total:用户总修改数
+#}
+
+
+{% extends "base.html" %}
+
+{% block head %}
+<title></title>
+<link rel="stylesheet" href="/css/index.css">
+{% endblock %}
+
+{% block content %}
+<br>
+<br>
+<div class="container">
+<div class="row">
+<div class="col-md-1"></div>
+<div class="col-md-3">
+<div class="circle">
+<img src="/img/a.jpg" alt="MLang" class="img-circle"> 
+</div>
+</div>
+<div class="col-md-7">
+<div class="rounded">
+<h1>Post in the language that you are learning.</h1>
+</div>
+</div>
+<div class="col-md-1"></div>
+</div>
+</div>
+<br>
+<br>
+<div class="container">
+<div class="row">
+<div class="col-md-1"></div>
+<div class="col-md-7">
+<div class="rounded">
+<h1>Native speakers correct your writing for you.</h1>
+</div>
+</div>
+
+<div class="col-md-1"></div>
+<div class="col-md-2">
+<div class="circle">
+<img src="/img/b.jpg" alt="MLang" class="img-circle"> 
+</div>
+</div>
+</div>
+<div class="col-md-1"></div>
+</div>
+<br>
+<br>
+<div class="container">
+<div class="row">
+<div class="col-md-1"></div>
+<div class="col-md-3">
+<div class="circle">
+<img src="/img/c.jpg" alt="MLang" class="img-circle"> 
+</div>
+</div>
+<div class="col-md-7">
+<div class="rounded">
+<h1>Help others learn your native
+<br>
+language!</h1>
+</div>
+</div>
+<div class="col-md-1"></div>
+</div>
+</div>
+
+{% endblock %}
+{% block script %}
+<script src="/js/index.js"></script>
+{% endblock %}

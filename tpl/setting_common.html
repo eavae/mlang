@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block head %}
+<title>{{_("M-Lang - signin")}}</title>
+<link rel="stylesheet" href="/css/login.css">
+{% endblock %}
+
+{% block content%}
+
+{% if errors and errors > 0 %}
+<div class="error_message">
+    {% for error_message in error_messages %}
+    <p>{{error_message}}</p>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% if messages %}
+<div class="other_message">
+    {% for message in messages %}
+    <p>{{message}}</p>
+    {% endfor %}
+</div>
+{% endif %}
+
+<form method="post" action="/settings/common">
+<table cellpadding="5" cellspacing="0" border="0">
+    <tr>
+        <td>{{l10n.string_username}}</td>
+        <td><input type="text" value="{{member.username}}" disabled="disabled"></td>
+    </tr>
+    <tr>
+        <td>{{l10n.string_email}}</td>
+        <td><input type="text" name="email" value="{{member.email}}"></td>
+    </tr>
+    <tr>
+        <td>{{l10n.string_favorite_lang}}</td>
+        <td>{{favorite_lang_select | safe}}</td>
+    </tr>
+    <tr>
+        <td>{{l10n.string_native_lang}}</td>
+        <td>{{native_lang_select | safe}}</td>
+    </tr>
+    <tr>
+        <td>{{l10n.string_location}}</td>
+        <td>{{location_select | safe}}</td>    
+    </tr>
+    <tr>
+        <td>{{l10n.string_website}}</td>
+        <td><input type="text" name="website" value="{{member.website}}"></td>
+    </tr>
+    <tr>
+        <td>{{l10n.string_motto}}</td>
+        <td><input type="text" name="motto" value="{{member.motto}}"></td>
+    </tr>
+    <tr>
+        <td>{{l10n.string_introduce}}</td>
+        <td><input type="text" name="introduce" value="{{member.introduce}}"></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td><input type="submit" value="{{l10n.string_submit}}"></td>
+    </tr>
+</table>
+</form>
+{% endblock %}

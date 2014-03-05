@@ -1,0 +1,7 @@
+{% if errors %}
+    <ul>
+        {% for type,content in errors.items() %}
+        <li class="{{type}}">{{content}}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
