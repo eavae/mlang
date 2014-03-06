@@ -66,7 +66,6 @@ class SettingCommonHandler(webapp2.RequestHandler):
         error_messages = []
 
         #check lang,location,l10n error
-        print form_native_lang, form_favorite_lang, form_location
         if form_native_lang not in supported_user_lang or \
             form_favorite_lang not in supported_user_lang or \
             form_location not in GetSupportedLocation():
@@ -110,6 +109,7 @@ class SettingCommonHandler(webapp2.RequestHandler):
             member.website = real_value(form_website, member.website)
             member.motto = real_value(form_motto, member.motto)
             member.introduce = real_value(form_introduce, member.introduce)
+            member.put()
             template_values['messages'].append(l10n.info_update_success)
 
         template_values['errors'] = errors

@@ -57,8 +57,13 @@ class MainHandler(BaseHandlers.BaseHandler):
         if 'message'in self.session:
             template_values['messages'] = [self.session['message']]
             del self.session['message']
-
-        template = J2_env.get_template('main.html')
+            
+        if section_name == 'exchange':
+            template = J2_env.get_template('lang_exchange.html')
+        elif section_name == 'question':
+            template = J2_env.get_template('lang_question.html')
+        elif section_name = 'culture':
+            template = J2_env.get_template('lang_culture.html')
         self.response.write(template.render(template_values))
 
 class ContentReceiveHandler(BaseHandlers.BaseHandler):

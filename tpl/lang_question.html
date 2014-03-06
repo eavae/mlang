@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block head %}
+<title>{{_("M-Lang")}}</title>
+<link rel="stylesheet" href="/css/login.css">
+{% endblock %}
+
+{% block content%}
+
+{% if errors and errors > 0 %}
+<div class="error_message">
+    {% for error_message in error_messages %}
+    <p>{{error_message}}</p>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% if messages %}
+<div class="other_message">
+    {% for message in messages %}
+    <p>{{message}}</p>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% for node in nodes %}
+    <a href="/{{section.name}}/{{node.name}}" {%if node.name == current_node.name%}style="background:#e5ebe4"{%endif%}>{{l10n.node_locale_title[node.name]}}</a>
+{% endfor %}
+<form method="post" action="/post/{{section.name}}">
+    <label for="title">{{l10n.string_title}}:</label>
+    <input name="title" type="text">
+    <label for="content">{{l10n.string_content}}:</label>
+    <textarea name="content"></textarea>
+    <input name="node_id" type="hidden" value="{{current_node.key.id()}}">
+    <input type="submit" value="{{l10n.string_submit}}">
+</form>
+
+{% for topic in topics %}
+<div>{{l10n.string_title}}:{{topic.title}}</div>
+<div>{{l10n.string_content}}:{{topic.content | safe}}</div>
+<div>created by:{{topic.member_key.get().username}}</div>
+<div>created time:{{topic.created_time}}</div>
+{% endfor %}
+{% endblock %}

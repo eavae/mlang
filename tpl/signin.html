@@ -7,10 +7,15 @@
 
 {% block content%}
 <div class="container">
+	{% if errors %}
+	{% for error_message in error_messages %}
+	<div class="error_message">{{error_message}}</div>
+	{% endfor %}
+	{% endif %}
   <form class="form-signin"  method="post" action="/signin">
     <h2 class="form-signin-heading">Please sign in</h2>
-    <input name="email_or_username" type="text" class="form-control" placeholder='{{_("Email address or Username")}}' autofocus>
-    <input name="password" type="password" class="form-control" placeholder='{{_("Password")}}'>
+    <input name="email_or_username" type="text" class="form-control" placeholder='{{_("Email address or Username")}}' required="required" autofocus>
+    <input name="password" type="password" class="form-control" placeholder='{{_("Password")}}' required="required">
     <input name="redirect_url" value="{{redirect_url}}" type="hidden">
     <button class="btn btn-lg btn-primary btn-block" type="submit">{{_("Sign in")}}</button>
   </form>
