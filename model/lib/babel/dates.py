@@ -19,7 +19,7 @@
 from __future__ import division
 
 import re
-import pytz as _pytz
+from pytz.gae import pytz as _pytz
 
 from datetime import date, datetime, time, timedelta
 from bisect import bisect_right

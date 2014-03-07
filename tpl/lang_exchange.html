@@ -39,6 +39,6 @@
 <div>{{l10n.string_title}}:{{topic.title}}</div>
 <div>{{l10n.string_content}}:{{topic.content | safe}}</div>
 <div>created by:{{topic.member_key.get().username}}</div>
-<div>created time:{{topic.created_time}}</div>
+<div>created time:{{topic.created_time_localed(member)}} {{l10n.string_ago}}</div>
 {% endfor %}
 {% endblock %}

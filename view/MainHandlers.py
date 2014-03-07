@@ -2,6 +2,7 @@
 
 import webapp2
 import urllib
+import json
 
 from view.J2_env import J2_env
 
@@ -62,7 +63,7 @@ class MainHandler(BaseHandlers.BaseHandler):
             template = J2_env.get_template('lang_exchange.html')
         elif section_name == 'question':
             template = J2_env.get_template('lang_question.html')
-        elif section_name = 'culture':
+        elif section_name == 'culture':
             template = J2_env.get_template('lang_culture.html')
         self.response.write(template.render(template_values))
 
@@ -116,3 +117,22 @@ class ContentReceiveHandler(BaseHandlers.BaseHandler):
             self.session['message'] = l10n.send_successful
 
         self.redirect('/%s/%s'%(section_name,node.name))
+
+class VoteTopicHandler(BaseHandlers.BaseHandler):
+    def post(self):
+        member = member_required(self)
+        if not member:
+            return
+        action = self.request.get('action','up').upper()
+        topic_id = self.request.get('tpoic_id')
+        action = 'UP' if action not in ['DOWN','UP']
+        if topic_id:
+            topic = Topic.get_by_id(topic_id)
+            if action == 'UP':
+                result = topic.vote_up_by(member)
+            else:
+                result = topic.vote_down_by(member)
+        else:
+            result = False
+        data = {'result':result}
+        self.response.write(json.dumps(data))

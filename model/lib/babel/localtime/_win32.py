@@ -7,7 +7,7 @@ except ImportError:
         winreg = None
 
 from babel.core import get_global
-import pytz
+from pytz.gae import pytz
 
 
 tz_names = get_global('windows_zone_mapping')

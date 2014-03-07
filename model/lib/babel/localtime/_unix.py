@@ -2,7 +2,7 @@ from __future__ import with_statement
 import os
 import re
 import sys
-import pytz
+from pytz.gae import pytz
 import subprocess
 
 _systemconfig_tz = re.compile(r'^Time Zone: (.*)$(?m)')

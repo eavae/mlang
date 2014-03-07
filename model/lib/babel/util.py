@@ -274,7 +274,7 @@ class FixedOffsetTimezone(tzinfo):
         return ZERO
 
 
-import pytz as _pytz
+from pytz.gae import pytz as _pytz
 from babel import localtime
 
 # Export the localtime functionality here because that's

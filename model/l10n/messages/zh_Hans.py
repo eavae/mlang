@@ -61,6 +61,7 @@ string_current_password = u'当前密码'
 string_new_password = u'新密码'
 string_repeat_password = u'再次输入新密码'
 string_password_error = u'您输入的当前密码不正确'
+string_ago = u'以前'
 
 section_title = {
     'exchange':u'LANG-互助',

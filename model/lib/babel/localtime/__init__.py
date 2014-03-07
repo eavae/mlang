@@ -11,7 +11,7 @@
 """
 
 import sys
-import pytz
+from pytz.gae import pytz
 import time
 from datetime import timedelta, datetime
 from datetime import tzinfo
