@@ -125,7 +125,8 @@ class VoteTopicHandler(BaseHandlers.BaseHandler):
             return
         action = self.request.get('action','up').upper()
         topic_id = self.request.get('tpoic_id')
-        action = 'UP' if action not in ['DOWN','UP']
+        if action not in ['DOWN','UP']:
+            action = 'UP'
         if topic_id:
             topic = Topic.get_by_id(topic_id)
             if action == 'UP':
@@ -136,3 +137,31 @@ class VoteTopicHandler(BaseHandlers.BaseHandler):
             result = False
         data = {'result':result}
         self.response.write(json.dumps(data))
+
+class TopicDetailHandler(BaseHandlers.BaseHandler):
+    def get(self,topic_id):
+        topic_id = str(urllib.unquote(topic_id))
+        member = CheckAuth(self)
+        template_values = CreateBaseTemplateValues(self, member)
+        template_values['member'] = member
+
+        topic = Topic.get_by_id(int(topic_id))
+        if not topic or not isinstance(topic, Topic):
+            return self.abort(404)
+        node = topic.node_key.get()
+        section = node.section_key.get()
+
+        #add topic hits property
+        topic.hits_by_ip(member.ip or GetIP(self))
+
+        template_values['topic'] = topic
+        template_values['node'] = node
+        template_values['section'] = section
+
+        if section.name.lower() == 'exchange':
+            template = J2_env.get_template('detail_exchange.html')
+        elif section.name.lower() == 'question':
+            template = J2_env.get_template('detail_question.html')
+        elif section.name.lower() == 'culture':
+            template = J2_env.get_template('detail_culture.html')
+        self.response.write(template.render(template_values))

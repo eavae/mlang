@@ -36,9 +36,9 @@
 </form>
 
 {% for topic in topics %}
-<div>{{l10n.string_title}}:{{topic.title}}</div>
-<div>{{l10n.string_content}}:{{topic.content | safe}}</div>
-<div>created by:{{topic.member_key.get().username}}</div>
-<div>created time:{{topic.created_time_localed(member)}} {{l10n.string_ago}}</div>
+<div><a href="/detail/{{topic.key.id()}}">{{topic.title}}</a></div>
+<div><span>created by:{{topic.member_key.get().username}}</span> | <span>created time:{{topic.created_time_localed(member)}} {{l10n.string_ago}}</span></div>
+<div><span>hits: {{topic.hits}} times</span> | <span>amends: {{topic.amends}} times</span> | <span>votes: {{topic.votes}} times</span></div>
+
 {% endfor %}
 {% endblock %}

@@ -8,6 +8,14 @@ from google.appengine.api import memcache
 
 from babel.dates import format_date,format_timedelta,get_timezone
 
+def time_localed(time, member):
+    delta = time - datetime.datetime.now()
+    if member:
+        locale = member.native_lang
+    else:
+        locale = 'en'
+    return format_timedelta(delta, locale=locale)
+
 class Member(ndb.Model):
     auth = ndb.StringProperty(required=True, indexed=True)
     deactivated = ndb.BooleanProperty(required=True, default=False)
@@ -40,8 +48,8 @@ class Member(ndb.Model):
         return self.created_time.strftime("%s")
 
     def _pre_put_hook(self):
-        memcache.set(self.auth, self.key.id())
-        memcache.set('Member_'+str(self.key.id()), self)
+        memcache.set(self.auth, str(self.key.id()))
+        memcache.set('Member_'+str(str(self.key.id())), self)
 
 
 class Counter(ndb.Model):
@@ -94,8 +102,9 @@ class Topic(ndb.Model):
     content = ndb.TextProperty()
     content_length = ndb.IntegerProperty(required=True, default=0)
     hits = ndb.IntegerProperty(default=0)
-    voted = ndb.IntegerProperty(required=True, default=0)
+    votes = ndb.IntegerProperty(required=True, default=0)
     replies = ndb.IntegerProperty(default=0)
+    amends = ndb.IntegerProperty(default=0)
     last_reply_by = ndb.KeyProperty(kind=Member)
     explicit = ndb.IntegerProperty(required=True, default=0)
     created_time = ndb.DateTimeProperty(auto_now_add=True)
@@ -103,31 +112,17 @@ class Topic(ndb.Model):
     touched_time = ndb.DateTimeProperty()
 
     def created_time_localed(self, member):
-        delta = self.created_time - datetime.datetime.now()
-        if member:
-            locale = member.native_lang
-        else:
-            locale = 'en'
-        return format_timedelta(delta, locale=locale)
+        return time_localed(self.created_time, member)
 
     def updated_time_localed(self, member):
-        delta = self.updated_time - datetime.datetime.now()
-        if member:
-            locale = member.native_lang
-        else:
-            locale = 'en'
-        return format_timedelta(delta, locale=locale)
+        return time_localed(self.updated_time, member)
 
     def touched_time_localed(self, member):
-        delta = self.touched_time - datetime.datetime.now()
-        if member:
-            locale = member.native_lang
-        else:
-            locale = 'en'
-        return format_timedelta(delta, locale=locale)
-    #if member voted return false,else add and return true
+        return time_localed(self.touched_time, member)
+
+    #if member votes return false,else add and return true
     def vote_up_by(self, member):
-        vote_up_members = memcache.get('Topic_'+self.key.id()+'_vote_up')
+        vote_up_members = memcache.get('Topic_'+str(self.key.id())+'_vote_up')
         if vote_up_members:
             if member.key.id() in vote_up_members:
                 return False
@@ -135,13 +130,13 @@ class Topic(ndb.Model):
                 vote_up_members.append(member.key.id())
         else:
             vote_up_members = [member.key.id()]
-        memcache.set('Topic_'+self.key.id()+'_vote_up', vote_up_members, time=60*60*24*90)
-        self.voted += 1
+        memcache.set('Topic_'+str(self.key.id())+'_vote_up', vote_up_members, time=60*60*24*20)
+        self.votes += 1
         self.put()
         return True
 
     def vote_down_by(self, member):
-        vote_down_members = memcache.get('Topic_'+self.key.id()+'_vote_down')
+        vote_down_members = memcache.get('Topic_'+str(self.key.id())+'_vote_down')
         if vote_down_members:
             if member.key.id() in vote_down_members:
                 return False
@@ -149,8 +144,25 @@ class Topic(ndb.Model):
                 vote_down_members.append(member.key.id())
         else:
             vote_down_members = [member.key.id()]
-        memcache.set('Topic_'+self.key.id()+'_vote_down', vote_up_members, time=60*60*24*90)
-        self.voted -= 1
+        memcache.set('Topic_'+str(self.key.id())+'_vote_down', vote_up_members, time=60*60*24*20)
+        self.votes -= 1
+        self.put()
+        return True
+
+    def hits_by_ip(self, ip):
+        hits_ips = memcache.get('Topic_'+str(self.key.id())+'_hits')
+        print hits_ips
+        if hits_ips:
+            if ip in hits_ips:
+                return False
+            else:
+                hits_ips.append(ip)
+        else:
+            hits_ips = [ip]
+        print hits_ips
+        memcache.set('Topic_'+str(self.key.id())+'_hits', hits_ips, time=60*60*24*20)
+        self.hits += 1
+        self.put()
         return True
 
 class Amend(ndb.Model):

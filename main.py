@@ -14,6 +14,7 @@ from view.SettingHandlers import AvatarServeHandler
 from view.MainHandlers import MainHandler
 from view.MainHandlers import MainRouterHandler
 from view.MainHandlers import ContentReceiveHandler
+from view.MainHandlers import TopicDetailHandler
 
 # def install_secret_key(app, filename='secret_key'):
 #     filename = os.path.join(app.instance_path, filename)
@@ -43,7 +44,8 @@ app = webapp2.WSGIApplication([
     ('/avatar/(large|normal|mini)/([^/]+)?', AvatarServeHandler),
     ('/(exchange|question|culture)', MainRouterHandler),
     ('/post/(exchange|question|culture)', ContentReceiveHandler),
-    ('/(exchange|question|culture)/([^/]+)?', MainHandler)
+    ('/(exchange|question|culture)/([^/]+)?', MainHandler),
+    ('/detail/([^/]+)?', TopicDetailHandler)
     ],
     debug=True,
     config=config)

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block head %}
+<title>{{_("M-Lang")}}</title>
+<link rel="stylesheet" href="/css/login.css">
+{% endblock %}
+
+{% block content%}
+
+{% if errors and errors > 0 %}
+<div class="error_message">
+    {% for error_message in error_messages %}
+    <p>{{error_message}}</p>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% if messages %}
+<div class="other_message">
+    {% for message in messages %}
+    <p>{{message}}</p>
+    {% endfor %}
+</div>
+{% endif %}
+
+<h1><a href="/detail/{{topic.key.id()}}">{{topic.title}}</a></h1>
+<div>Contents:</div>
+<div>{{topic.content}}</div>
+<div><span>last edited at: {{topic.updated_time_localed(member)}} ago</span> | <span>created by: <a href="member/{{topic.member_key.id()}}">{{topic.member_key.get().username}}</a></span></div>
+
+{% endblock %}
