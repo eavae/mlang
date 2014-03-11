@@ -226,7 +226,6 @@ class AvatarUploadHandler(blobstore_handlers.BlobstoreUploadHandler,BaseHandlers
             except:
                 errors += 1
                 message = l10n.avatar_accept_error
-            #2.TODO:check mini type
             if blob_info.content_type not in ['image/bmp','image/gif','image/jpeg','image/png']:
                 errors += 1
                 message = l10n.avatar_type_error

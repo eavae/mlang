@@ -32,10 +32,12 @@ title_too_short = u'您输入的标题太短'
 title_too_long = u'您输入的标题太长，最多128个字符'
 system_error = u'系统错误'
 send_successful = u'发表成功'
+feedback_successful = u'非常感谢您的宝贵意见。'
 
 setting_common = u'常规设置'
 setting_avatar = u'更换头像'
 setting_password = u'修改密码'
+illegal_operation = u'不允许的操作'
 
 # messages for index page header
 header_user_signout = u'登出'

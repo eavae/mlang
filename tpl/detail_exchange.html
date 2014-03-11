@@ -28,4 +28,33 @@
 <div>{{topic.content}}</div>
 <div><span>last edited at: {{topic.updated_time_localed(member)}} ago</span> | <span>created by: <a href="member/{{topic.member_key.id()}}">{{topic.member_key.get().username}}</a></span></div>
 
+<!-- START 这里应该使用ajax进行操作 -->
+<div><a href="/operations?action=topic_vote_up&&id={{topic.key.id()}}">Vote Up</a>    <a href="/operations?action=topic_vote_down&&id={{topic.key.id()}}">Vote Down</a></div>
+<!-- END 这里应该使用ajax进行操作 -->
+<div>================Amends:================</div>
+<!--START Amends-->
+{% if amends %}
+{% for amend in amends %}
+<div class="amend">
+	<div>{{amend.content}}</div>
+	<div><span>Created by: <a href="/member/{{amend.member_key.id()}}">{{amend.member_key.get().username}}</a></span> | <span>Created time: {{amend.created_time_localed(member)}}</span></div>
+	<div><span>Comments {{amend.replies}} times</span> | <span>votes {{amend.votes}} times</span></div>
+	<div>------------</div>
+</div>
+{% endfor %}
+{% endif %}
+<!--END Amends-->
+
+<form id="reply" method="post" action="/reply/{{topic.key.id()}}">
+	<label for="content">Comment:</label>
+	<textarea name="content"></textarea>
+	<input type="submit" value="{{l10n.string_submit}}">
+</form>
+
+<form id="amend" method="post" action="/amend/{{topic.key.id()}}">
+	<label for="content">Amend:</label>
+	<textarea name="content"></textarea>
+	<input type="submit" value="{{l10n.string_submit}}">
+</form>
+
 {% endblock %}

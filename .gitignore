@@ -7,3 +7,6 @@ ENV
 *.po
 index.yaml
 .DS_Store
+*.sublime-project
+*.sublime-worksapce
+static

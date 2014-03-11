@@ -149,7 +149,7 @@ class Topic(ndb.Model):
         self.put()
         return True
 
-    def hits_by_ip(self, ip):
+    def hit_by_ip(self, ip):
         hits_ips = memcache.get('Topic_'+str(self.key.id())+'_hits')
         print hits_ips
         if hits_ips:
@@ -172,18 +172,52 @@ class Amend(ndb.Model):
     tags = ndb.StringProperty(repeated=True)
     has_content = ndb.BooleanProperty(required=True, default=True)
     content = ndb.TextProperty()
-    content_rendered = ndb.TextProperty()
     content_length = ndb.IntegerProperty(required=True, default=0)
+    votes = ndb.IntegerProperty(default=0)
     stars = ndb.IntegerProperty(required=True, default=0)
     replies = ndb.IntegerProperty(default=0)
-    created_by = ndb.StringProperty(indexed=True)
     last_reply_by = ndb.StringProperty(indexed=True)
-    source = ndb.StringProperty(indexed=True) #TODO
-    explicit = ndb.IntegerProperty(required=True, default=0)
     created_time = ndb.DateTimeProperty(auto_now_add=True)
     updated_time = ndb.DateTimeProperty(auto_now=True)
     touched_time = ndb.DateTimeProperty()
     highlighted = ndb.BooleanProperty(required=True, default=False)
+
+    def created_time_localed(self, member):
+        return time_localed(self.created_time, member)
+
+    def updated_time_localed(self, member):
+        return time_localed(self.updated_time, member)
+
+    def touched_time_localed(self, member):
+        return time_localed(self.touched_time, member)
+
+    def vote_up_by(self, member):
+        vote_up_members = memcache.get('Topic_'+str(self.key.id())+'_vote_up')
+        if vote_up_members:
+            if member.key.id() in vote_up_members:
+                return False
+            else:
+                vote_up_members.append(member.key.id())
+        else:
+            vote_up_members = [member.key.id()]
+        memcache.set('Topic_'+str(self.key.id())+'_vote_up', vote_up_members, time=60*60*24*20)
+        self.votes += 1
+        self.put()
+        return True
+
+    def vote_down_by(self, member):
+        vote_down_members = memcache.get('Topic_'+str(self.key.id())+'_vote_down')
+        if vote_down_members:
+            if member.key.id() in vote_down_members:
+                return False
+            else:
+                vote_down_members.append(member.key.id())
+        else:
+            vote_down_members = [member.key.id()]
+        memcache.set('Topic_'+str(self.key.id())+'_vote_down', vote_up_members, time=60*60*24*20)
+        self.votes -= 1
+        self.put()
+        return True
 
 class Reply(ndb.Model):
     topic_key = ndb.KeyProperty(kind=Topic)
@@ -224,5 +258,15 @@ class Site(ndb.Model):
     data_migration_mode = ndb.IntegerProperty(required=True, default=0)
     created_time = ndb.DateTimeProperty(auto_now_add=True)
     updated_time = ndb.DateTimeProperty(auto_now=True)
+
+class Feedback(ndb.Model):
+    title = ndb.StringProperty()
+    content = ndb.TextProperty()
+    email = ndb.StringProperty()
+    phone = ndb.StringProperty()
+    member_key = ndb.KeyProperty(kind=Member)
+    screen_short = ndb.StringProperty()
+    solved = ndb.BooleanProperty(default=False)
+    created_time = ndb.DateTimeProperty(auto_now_add=True)
 
 

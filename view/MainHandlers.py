@@ -7,7 +7,7 @@ import json
 from view.J2_env import J2_env
 
 from google.appengine.datastore.datastore_query import Cursor
-from model.db import Section,Node,Topic
+from model.db import Section,Node,Topic,Amend
 from model.l10n import *
 from model.util.security import *
 from model.util.common import *
@@ -118,25 +118,6 @@ class ContentReceiveHandler(BaseHandlers.BaseHandler):
 
         self.redirect('/%s/%s'%(section_name,node.name))
 
-class VoteTopicHandler(BaseHandlers.BaseHandler):
-    def post(self):
-        member = member_required(self)
-        if not member:
-            return
-        action = self.request.get('action','up').upper()
-        topic_id = self.request.get('tpoic_id')
-        if action not in ['DOWN','UP']:
-            action = 'UP'
-        if topic_id:
-            topic = Topic.get_by_id(topic_id)
-            if action == 'UP':
-                result = topic.vote_up_by(member)
-            else:
-                result = topic.vote_down_by(member)
-        else:
-            result = False
-        data = {'result':result}
-        self.response.write(json.dumps(data))
 
 class TopicDetailHandler(BaseHandlers.BaseHandler):
     def get(self,topic_id):
@@ -152,11 +133,25 @@ class TopicDetailHandler(BaseHandlers.BaseHandler):
         section = node.section_key.get()
 
         #add topic hits property
-        topic.hits_by_ip(member.ip or GetIP(self))
+        topic.hit_by_ip(member.ip or GetIP(self))
 
         template_values['topic'] = topic
         template_values['node'] = node
         template_values['section'] = section
+
+        #if section.name==exchange add amends
+        if section.name.lower() == 'exchange':
+            template_values['amends'] = Amend.query(Amend.topic_key==topic.key)
+
+        #show errors
+        if 'errors' in self.session:
+            template_values['errors'] = self.session['errors']
+            template_values['error_messages'] = self.session['error_messages']
+            del self.session['errors']
+            del self.session['error_messages']
+        if 'message'in self.session:
+            template_values['messages'] = [self.session['message']]
+            del self.session['message']
 
         if section.name.lower() == 'exchange':
             template = J2_env.get_template('detail_exchange.html')
@@ -165,3 +160,45 @@ class TopicDetailHandler(BaseHandlers.BaseHandler):
         elif section.name.lower() == 'culture':
             template = J2_env.get_template('detail_culture.html')
         self.response.write(template.render(template_values))
+
+class TopicAmendHander(BaseHandlers.BaseHandler):
+    def post(self, id):
+        id = int(urllib.unquote(id))
+        content = self.request.get('content')
+        #TODO:Content should rendered
+        member = member_required(self)
+        if not member:
+            return
+        template_values = CreateBaseTemplateValues(self, member)
+        l10n = template_values['l10n']
+        errors = 0
+        error_messages=[]
+
+        topic = Topic.get_by_id(id)
+        #check_error: 只能对exchange节的话题添加修改
+        if topic:
+            node = topic.node_key.get()
+            section = node.section_key.get()
+            if section.name.lower() != 'exchange':
+                self.abort(404)
+                return
+        else:
+            self.abort(404)
+            return
+        #save data to db
+        if not errors:
+            amend = Amend()
+            amend.topic_key = topic.key
+            amend.member_key = member.key
+            amend.has_content = True
+            amend.content = content
+            amend.content_length = len(content)
+            amend.put()
+            topic.amends += 1
+            topic.put()
+            self.session['message'] = l10n.send_successful
+        else:
+            self.session['errors'] = errors
+            self.session['error_messages'] = error_messages
+
+        self.redirect('/detail/'+str(id))

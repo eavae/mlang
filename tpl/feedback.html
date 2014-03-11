@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block head %}
+<title>{{_("M-Lang")}}</title>
+<link rel="stylesheet" href="/css/login.css">
+{% endblock %}
+
+{% block content%}
+
+{% if errors and errors > 0 %}
+<div class="error_message">
+    {% for error_message in error_messages %}
+    <p>{{error_message}}</p>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% if messages %}
+<div class="other_message">
+    {% for message in messages %}
+    <p>{{message}}</p>
+    {% endfor %}
+</div>
+{% endif %}
+
+<div>feedback</div>
+
+<form method="post" action="/feedback">
+	<label for="title">Title *:</label>
+	<input name="title" type="text">
+	<label for="content">Content:</label>
+	<textarea name="content"></textarea>
+	<label for="email">Email:</label>
+	<input type="email" name="email">
+	<label for="phone">Phone Number:</label>
+	<input type="text" name="phone">
+	<input type="file" name="screen_short">
+	<input type="submit" value="{{l10n.string_submit}}">
+</form>
+
+<div>==================================</div>
+{% if feedbacks %}
+{% for feedback in feedbacks %}
+<h2>{{feedback.title}}</h2>
+<div>{{feedback.content}}</div>
+{% endfor %}
+{% endif %}
+
+{% endblock %}
