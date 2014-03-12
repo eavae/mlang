@@ -10,10 +10,10 @@ root_path = os.path.dirname(__file__)
 watch_path = os.path.join(root_path, 'source')
 #创建子进程并自动执行编译程序
 
-re_all = r"/\w+\.(js|css|less)$"
-re_js = r"/\w+\.js$"
-re_css = r"/\w+\.css$"
-re_less = r"/\w+\.less$"
+re_all = r"/[^/]+\.(js|css|less)$"
+re_js = r"/[^/]+\.js$"
+re_css = r"/[^/]+\.css$"
+re_less = r"/[^/]+\.less$"
 
 def mkdirs(path):
     path = path.strip()
@@ -64,8 +64,10 @@ class FileHandler(FileSystemEventHandler):
             if file_name:
                 src_dir_path = path.rstrip(file_name)
                 dest_dir_path = re.sub(r'/source/','/static/',src_dir_path)
+                dest_dir_path = re.sub(r'/less/','/css/',dest_dir_path)
                 mkdirs(dest_dir_path)
                 dest_path = re.sub(r'/source/','/static/',path)
+                dest_path = re.sub(r'/less/','/css/',dest_path)
                 compile_files(path,dest_path)
 
     def on_modified(self, event):
@@ -75,8 +77,10 @@ class FileHandler(FileSystemEventHandler):
             if file_name:
                 src_dir_path = path.rstrip(file_name)
                 dest_dir_path = re.sub(r'/source/','/static/',src_dir_path)
+                dest_dir_path = re.sub(r'/less/','/css/',dest_dir_path)
                 mkdirs(dest_dir_path)
                 dest_path = re.sub(r'/source/','/static/',path)
+                dest_path = re.sub(r'/less/','/css/',dest_path)
                 compile_files(path,dest_path)
 
     def on_deleted(self, event):
@@ -91,8 +95,10 @@ def run_child():
     lists = get_file_list(watch_path)
     for src_path in lists:
         dest_path = re.sub(r'/source/','/static/',src_path)
+        dest_path = re.sub(r'/less/','/css/',dest_path)
         mkdirs(dest_path)
         if not os.path.isfile(dest_path):
+            dest_path = re.sub(r'/less/','/css/',dest_path)
             compile_files(src_path, dest_path)
 
     event_handler = FileHandler()

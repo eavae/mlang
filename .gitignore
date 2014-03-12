@@ -8,5 +8,5 @@ ENV
 index.yaml
 .DS_Store
 *.sublime-project
-*.sublime-worksapce
+*.sublime-workspace
 static

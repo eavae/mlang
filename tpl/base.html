@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no, maximum-scale=1.0">
-    <link href="/css/bootstrap.css" rel="stylesheet">
-    <link href="/css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/base.css">
     {% block head %}
     <title>{{site.title}}</title>
     <link href="/css/index.css" rel="stylesheet">
@@ -12,64 +12,59 @@
   </head>
 
   <body>
-    <div id="wrap">
-      <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-          <div class="navbar-header">
-            <a class="navbar-brand" href="/">M-Lang</a>
-          </div>
-          <div class="navbar-collapse collapse">
-            <ul id="main-nav" class="nav navbar-nav">
-              <li><a href="/exchange">{{l10n.section_title['exchange']}}</a></li>
-              <li><a href="/question">{{l10n.section_title['question']}}</a></li>
-              <li><a href="/culture">{{l10n.section_title['culture']}}</a></li>
-            </ul>  
-            <ul class="nav navbar-nav navbar-right">
-              {% if member %}
-              <li><a href="/user/{{member.key.id()}}">{{member.username}}</a></li>
-              <li><a href="/settings/common">{{l10n.header_user_setting}}</a></li>
-              <li><a href="/signout">{{l10n.header_user_signout}}</a></li>
-              {% else %}
-              <li><a href="/signup">{{l10n.header_user_signup}}</a></li>
-              <li><a href="/signin">{{l10n.header_user_signin}}</a></li>
-              {% endif %}
-            </ul>
-          </div>
-        </div>
+  <div class="wrap">
+    <div class="navbar nav-fixed">
+      <div class="nav-logo"><a href="/">M-Lang</a></div>
+      <div class="nav-box">
+        <ul class="nav-site-info">
+          <li><a href="/exchange">{{l10n.section_title['exchange']}}</a></li>
+          <li><a href="/question">{{l10n.section_title['question']}}</a></li>
+          <li><a href="/culture">{{l10n.section_title['culture']}}</a></li>
+        </ul>  
+        <ul class="nav-user-info">
+          {% if member %}
+          <li><a href="/user/{{member.key.id()}}">{{member.username}}</a></li>
+          <li><a href="/settings/common">{{l10n.header_user_setting}}</a></li>
+          <li><a href="/signout">{{l10n.header_user_signout}}</a></li>
+          {% else %}
+          <li><a href="/signup">{{l10n.header_user_signup}}</a></li>
+          <li><a href="/signin">{{l10n.header_user_signin}}</a></li>
+          {% endif %}
+        </ul>
       </div>
+    </div>
+
+    <div class="main">
       <div id="content">
         {% block content %}
         {% endblock %}
       </div>
     </div>
+  </div>
 
-    <div id="footer">
-      <div class="container">
-        {% block footer %}
-        <div class="text-center">
-          <a href="/about">{{_("About")}}</a> | 
-          <a href="/join">{{_("Join us")}}</a> | 
-          <a href="/help">{{_("Help")}}</a> | 
-          <a href="/feedback">{{_("Feedback")}}</a> | 
-          <a href="/privacy">{{_("Privacy and Terms of Use")}}</a>
-        </div>
-        <div class="text-center">
-          <a href="//jquery.com/">JQuery</a> | 
-          <a href="//v3.bootcss.com/">Bootstrap</a> | 
-          <a href="//fortawesome.github.io/Font-Awesome/">Font-Awesome</a> | 
-          <a href="//www.bootcss.com/p/bootstrap-wysiwyg/">Bootstrap-wysiwyg</a> | 
-          <a href="//glyphicons.com/">Glyphicons</a>
-          <a href=""></a>
-        </div>
-        {% endblock %}
-      </div>
+  <div class="footer">
+    {% block footer %}
+    <div>
+      <a href="/about">{{_("About")}}</a> | 
+      <a href="/join">{{_("Join us")}}</a> | 
+      <a href="/help">{{_("Help")}}</a> | 
+      <a href="/feedback">{{_("Feedback")}}</a> | 
+      <a href="/privacy">{{_("Privacy and Terms of Use")}}</a>
     </div>
-    <script src="/js/jquery.js"></script>
-    <script src="/js/lib/jquery.hotkeys.js"></script>
-    <script src="/js/lib/countable.js"></script>
-    <script src="/js/lib/bootstrap-wysiwyg.js"></script>
-    <script src="/js/base.js"></script>
-    {% block script %}
+    <div>
+      <a href="//jquery.com/">JQuery</a> | 
+      <a href="//v3.bootcss.com/">Bootstrap</a> | 
+      <a href="//fortawesome.github.io/Font-Awesome/">Font-Awesome</a> | 
+      <a href="//www.bootcss.com/p/bootstrap-wysiwyg/">Bootstrap-wysiwyg</a> | 
+      <a href="//glyphicons.com/">Glyphicons</a>
+      <a href=""></a>
+    </div>
     {% endblock %}
+  </div>
+  
+  <script src="/js/lib/jquery.js"></script>
+  <script src="require.js"></script>
+  {% block script %}
+  {% endblock %}
   </body>
 </html>
